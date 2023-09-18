@@ -1,6 +1,7 @@
 # C323 Project 3 
 
-This is a math practice app for an Android Device.
+This is a math practice app for an Android Device. 
+For division problems, I've decided that the user only has to do Integer division, where the remainder does not matter.
 
 ## Functionality 
 
@@ -25,7 +26,7 @@ Here's a walkthrough of implemented user stories:
 ## Notes
 
 Describe any challenges encountered while building the app.
-I did have troubles getting the safe args set up at the start, but eventually I figured out how to set it up and download the proper version into the application.
+I did have trouble getting the safe args set up at the start, but eventually, I figured out how to set it up and download the proper version into the application.
 
 ## License
 
