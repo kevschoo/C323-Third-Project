@@ -1,4 +1,4 @@
-# C323 Project 3 
+# C323 Project 4
 
 This is a math practice app for an Android Device. 
 For division problems, I've decided that the user only has to do Integer division, where the remainder does not matter.
@@ -7,9 +7,12 @@ For division problems, I've decided that the user only has to do Integer divisio
 
 The following **required** functionality is completed:
 
-* [ ] User can select type of problem, difficulty, and number of questions
+* [ ] User can select the type of problem, difficulty, and number of questions
 * [ ] App properly gives the user a series of questions and keeps track of them
-* [ ] App returns results for the users problems such as correct amount and incorrect
+* [ ] App returns results for the user's problems such as the correct amount and incorrect
+* [ ] If the user gets 80% or more correct then it displays a congrats message
+* [ ] Show a Toast when the user answers a question
+* [ ] Play a sound when the user answers a question.
 
 The following **extensions** are implemented:
 
