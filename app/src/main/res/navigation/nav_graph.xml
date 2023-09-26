@@ -25,6 +25,13 @@
             android:name="operation"
             app:argType="string"
             android:defaultValue="addition" />
+        <argument
+            android:name="correct"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument android:name="incorrect"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/questions"
@@ -75,5 +82,13 @@
             android:name="questionAmount"
             app:argType="integer"
             android:defaultValue="0" />
+        <argument
+            android:name="difficulty"
+            app:argType="string"
+            android:defaultValue="easy" />
+        <argument
+            android:name="operation"
+            app:argType="string"
+            android:defaultValue="addition" />
     </fragment>
 </navigation>

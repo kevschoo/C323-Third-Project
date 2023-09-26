@@ -37,6 +37,9 @@ class results : Fragment() {
         totalCorrectAnswers = questionsArgs.fromBundle(requireArguments()).correctAnswers
         totalWrongAnswers = questionsArgs.fromBundle(requireArguments()).incorrectAnswers
 
+        difficulty = questionsArgs.fromBundle(requireArguments()).difficulty
+        operation = questionsArgs.fromBundle(requireArguments()).operation
+
         resultsTextView = view.findViewById(R.id.result)
         btnDone = view.findViewById(R.id.btn_try_again)
         return view
@@ -50,7 +53,7 @@ class results : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btnDone.setOnClickListener {
-            val action = resultsDirections.actionResultsToWelcome()
+            val action = resultsDirections.actionResultsToWelcome(questionAmount = this.numberOfQuestions, operation = this.operation, correct = this.totalCorrectAnswers, incorrect = this.totalWrongAnswers, difficulty = this.difficulty)
             view.findNavController().navigate((action))
         }
 

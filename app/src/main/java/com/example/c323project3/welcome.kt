@@ -1,5 +1,6 @@
 package com.example.c323project3
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -26,13 +28,21 @@ class welcome : Fragment() {
     private lateinit var radioMultiplication: RadioButton
     private lateinit var radioDivision: RadioButton
 
+    private lateinit var feedbackTextView: TextView
     /** Represents the difficulty level selected by the user. */
     var difficulty = "easy"
     /** Represents the math operation selected by the user. */
     var operation = "addition"
     /** Represents the number of questions chosen by the user. */
+
+
+    var prevDifficulty = ""
+    var prevOperation = ""
     var numberOfQuestions = 10
 
+    var prevNumberOfQuestions = 0
+    var correctAnswers = 0
+    var incorrectAnswers = 0
     /**
      * Initializes the welcome screen fragment.
      */
@@ -41,6 +51,11 @@ class welcome : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_welcome, container, false)
+        correctAnswers = welcomeArgs.fromBundle(requireArguments()).correct
+        incorrectAnswers = welcomeArgs.fromBundle(requireArguments()).incorrect
+        prevNumberOfQuestions = correctAnswers + incorrectAnswers
+        prevOperation = welcomeArgs.fromBundle(requireArguments()).operation
+        prevDifficulty = welcomeArgs.fromBundle(requireArguments()).difficulty
 
         return view
     }
@@ -63,11 +78,16 @@ class welcome : Fragment() {
         radioSubtraction = view.findViewById(R.id.radio_subtraction)
         radioMultiplication = view.findViewById(R.id.radio_multiplication)
         radioDivision = view.findViewById(R.id.radio_division)
+        feedbackTextView = view.findViewById(R.id.feedback)
 
         btnStart.setOnClickListener {
+
             navigateToQuestionsFragment()
-            val action = welcomeDirections.actionWelcomeToQuestions(numberOfQuestions,0,0,operation,difficulty)
-            view.findNavController().navigate((action))
+            if (numberOfQuestions > 0)
+            {
+                val action = welcomeDirections.actionWelcomeToQuestions(questionAmount = this.numberOfQuestions, 0, 0, operation, difficulty)
+                view.findNavController().navigate((action))
+            }
         }
 
         buttonMinus.setOnClickListener {
@@ -78,6 +98,33 @@ class welcome : Fragment() {
         buttonPlus.setOnClickListener {
             val currentNum = editTextNumberOfQuestions.text.toString().toInt()
             editTextNumberOfQuestions.setText((currentNum + 1).toString())
+        }
+
+
+        if ( correctAnswers + incorrectAnswers > 0)
+        {
+            val score = (correctAnswers.toFloat() / (correctAnswers + incorrectAnswers) * 100).toInt()
+            //feedbackTextView.text = "$correctAnswers $incorrectAnswers $numberOfQuestions $prevOperation $prevDifficulty"
+            if (score >= 80 && prevNumberOfQuestions > 0)
+            {
+                feedbackTextView.text = "You got $correctAnswers correct out of $prevNumberOfQuestions $prevDifficulty $prevOperation questions. Good Job. Score: $score%"
+                feedbackTextView.visibility = View.VISIBLE
+                feedbackTextView.setTextColor(Color.BLACK)
+            }
+            else if ( prevNumberOfQuestions > 0)
+            {
+                feedbackTextView.text = "You got $correctAnswers correct out of $prevNumberOfQuestions $prevDifficulty $prevOperation questions. You need to try harder. Score: $score%"
+                feedbackTextView.visibility = View.VISIBLE
+                feedbackTextView.setTextColor(Color.RED)
+            }
+            else
+            {
+                feedbackTextView.text = "Select a Difficulty, Operation, and Number of Questions! "
+            }
+        }
+        else
+        {
+            feedbackTextView.text = "Select a Difficulty, Operation, and Number of Questions! "
         }
     }
 

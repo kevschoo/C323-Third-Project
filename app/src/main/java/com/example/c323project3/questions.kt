@@ -13,6 +13,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import kotlin.random.Random
+import android.media.MediaPlayer
+import android.widget.Toast
 
 class questions : Fragment() {
 
@@ -46,6 +48,7 @@ class questions : Fragment() {
         difficulty = welcomeArgs.fromBundle(requireArguments()).difficulty
         operation = welcomeArgs.fromBundle(requireArguments()).operation
         numberOfQuestions = welcomeArgs.fromBundle(requireArguments()).questionAmount
+
         mathQuestionTextView = view.findViewById(R.id.math_question)
         etUserAnswer = view.findViewById(R.id.et_user_answer)
 
@@ -65,7 +68,14 @@ class questions : Fragment() {
         btnDone.setOnClickListener {
             checkAnswer()
         }
-        setRandomMathProblem()
+        if (numberOfQuestions > 0)
+        {
+            setRandomMathProblem()
+        }
+        else
+        {
+            navigateToResults()
+        }
     }
 
     /**
@@ -137,15 +147,20 @@ class questions : Fragment() {
     private fun navigateToResults()
     {
         val currentView = view ?: return
-        val action = questionsDirections.actionQuestionsToResults(correctAnswers = this.totalCorrectAnswers, incorrectAnswers = this.totalWrongAnswers, questionAmount = this.numberOfQuestions)
+        val action = questionsDirections.actionQuestionsToResults(correctAnswers = this.totalCorrectAnswers, incorrectAnswers = this.totalWrongAnswers, questionAmount = this.numberOfQuestions, difficulty = this.difficulty, operation = this.operation)
         currentView.findNavController().navigate(action)
     }
 
     /**
      * Checks the user's input against the correct answer and updates the score.
      */
-    private fun checkAnswer()
-    {
+    private fun checkAnswer() {
+
+        if (numberOfQuestions <= 0)
+        {
+            navigateToResults()
+            return
+        }
 
         val userInput = etUserAnswer.text.toString().toIntOrNull()
 
@@ -154,22 +169,35 @@ class questions : Fragment() {
             if (userInput == currentAnswer)
             {
                 totalCorrectAnswers++
+                playSoundEffect(R.raw.correct)
+                Toast.makeText(context, "Correct. Good work!", Toast.LENGTH_SHORT).show()
+
             }
             else
             {
                 totalWrongAnswers++
+                playSoundEffect(R.raw.incorrect)
+                Toast.makeText(context, "Wrong", Toast.LENGTH_SHORT).show()
             }
-            setRandomMathProblem()
             etUserAnswer.text.clear()
 
-            numberOfQuestions = numberOfQuestions-1
-        }
+            numberOfQuestions--
 
-        if(numberOfQuestions <= 0)
-        {
-            navigateToResults()
+            if (numberOfQuestions > 0)
+            {
+                setRandomMathProblem()
+            }
+            else
+            {
+                navigateToResults()
+            }
         }
-
     }
 
+    private fun playSoundEffect(soundFile: Int)
+    {
+        val mediaPlayer = MediaPlayer.create(context, soundFile)
+        mediaPlayer.start()
+        mediaPlayer.setOnCompletionListener { mp -> mp.release() }
+    }
 }
