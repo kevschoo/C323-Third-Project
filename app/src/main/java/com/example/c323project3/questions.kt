@@ -193,7 +193,9 @@ class questions : Fragment() {
             }
         }
     }
-
+    /**
+     * Plays a sound effect based on file
+     */
     private fun playSoundEffect(soundFile: Int)
     {
         val mediaPlayer = MediaPlayer.create(context, soundFile)
